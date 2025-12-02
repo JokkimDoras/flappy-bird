@@ -1,0 +1,37 @@
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+  background-color: #121212;
+  font: bolder;
+}
+
+
+h2{
+  font: bolder;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+   
+  font-weight: 1000;
+
+}
+button{
+  padding: 10px;
+  background-color: rgb(61, 61, 242);
+  border-radius: 20px;
+  color: white;
+  font:bolder;
+
+}
+button:hover{
+  background-color: aqua;
+  color: black;
+  font: bolder;
+  cursor: pointer;
+}
+h1{
+  padding: 10px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: bold;
+}
