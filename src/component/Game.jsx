@@ -14,6 +14,9 @@ export default function Game() {
     const birdRef = useRef(birdPosition);
     const currentPipeXRef = useRef(pipeX);
 
+    // Mobile responsive bird position
+    const BIRD_LEFT = window.innerWidth < 600 ? 140 : 250;
+
     useEffect(() => {
         birdRef.current = birdPosition;
     }, [birdPosition]);
@@ -61,7 +64,7 @@ export default function Game() {
 
         window.addEventListener('keydown', handleKeyDown);
 
-        // Mobile + desktop support
+        // Works on mobile + desktop
         window.addEventListener('pointerdown', jump);
 
         return () => {
@@ -90,7 +93,7 @@ export default function Game() {
                 const HITBOX = 40;
                 const OFFSET = 15;
 
-                const birdLeft = 250 + OFFSET;
+                const birdLeft = BIRD_LEFT + OFFSET;
                 const birdRight = birdLeft + HITBOX;
 
                 const birdTop = birdRef.current + OFFSET;
@@ -140,7 +143,7 @@ export default function Game() {
     // Score
     useEffect(() => {
         const newX = pipeX;
-        const birdLeft = 250;
+        const birdLeft = BIRD_LEFT;
 
         if (!passed && newX + 60 < birdLeft) {
             setScore(prev => prev + 1);
@@ -244,7 +247,7 @@ export default function Game() {
                 src={flappy}
                 style={{
                     position: 'absolute',
-                    left: '250px',
+                    left: `${BIRD_LEFT}px`,
                     top: birdPosition,
                     borderRadius: '50%',
                     width: '70px',
