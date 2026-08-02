@@ -9,8 +9,12 @@ export default function Game() {
     const [score, setScore] = useState(0);
     const [passed, setPassed] = useState(false);
     const [gone, setGone] = useState(false);
-    const [highScore, setHighScore] = useState(0);
+    const [highScore, setHighScore] = useState(() => {
+        return Number(localStorage.getItem('highscore')) || 0;
+    });
 
+
+    
     const birdRef = useRef(birdPosition);
     const currentPipeXRef = useRef(pipeX);
 
@@ -27,14 +31,18 @@ export default function Game() {
 
     const GAP = 150;
 
+    useEffect(() => {
+        if(score>highScore){
+            setHighScore(score)
+            localStorage.setItem('highscore', String(score))
+
+        }
+    },[score,highScore])
+
     // Gravity
     useEffect(() => {
-        if (gameOver) {
-            if (score > highScore) {
-                setHighScore(score);
-            }
-            return;
-        }
+      
+        if(gameOver) return;
 
         const gravity = setInterval(() => {
             setBirdPosition(prev => prev + 3);
