@@ -6,6 +6,7 @@ export default function Game() {
     const [pipeX, setPipeX] = useState(600);
     const [pipeHeight, setPipeHeight] = useState(400);
     const [gameOver, setGameOver] = useState(false);
+    const [pause, setPause] = useState(false);
     const [score, setScore] = useState(0);
     const [passed, setPassed] = useState(false);
     const [gone, setGone] = useState(false);
@@ -14,7 +15,7 @@ export default function Game() {
     });
 
 
-    
+
     const birdRef = useRef(birdPosition);
     const currentPipeXRef = useRef(pipeX);
 
@@ -32,33 +33,48 @@ export default function Game() {
     const GAP = 150;
 
     useEffect(() => {
-        if(score>highScore){
+        if (score > highScore) {
             setHighScore(score)
             localStorage.setItem('highscore', String(score))
 
         }
-    },[score,highScore])
+    }, [score, highScore])
 
     // Gravity
     useEffect(() => {
-      
-        if(gameOver) return;
+
+        if (gameOver) return;
+        if (pause) return
 
         const gravity = setInterval(() => {
             setBirdPosition(prev => prev + 3);
         }, 30);
 
         return () => clearInterval(gravity);
-    }, [gameOver]);
+    }, [gameOver, pause]);
 
     // Random pipe height
     const randomHeight = () => {
         setPipeHeight(Math.floor(Math.random() * 300) + 50);
     };
 
+
+    useEffect(() => {
+        const handleP = (e) => {
+            if(gameOver) return
+            if (e.key.toLowerCase() !== 'p') return;
+
+           setPause((prev) => !prev )
+
+        }
+        window.addEventListener('keydown',handleP)
+
+        return () => window.removeEventListener('keydown',handleP)
+    },[gameOver])
     // Controls
     useEffect(() => {
         if (gameOver) return;
+        if (pause) return;
 
         const jump = () => {
             setBirdPosition(prev => prev - 50);
@@ -79,11 +95,13 @@ export default function Game() {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('pointerdown', jump);
         };
-    }, [gameOver]);
+    }, [gameOver, pause]);
 
     // Pipe movement + collision
     useEffect(() => {
         if (gameOver) return;
+        if (pause) return
+
 
         const pipeMovement = setInterval(() => {
             setPipeX(prev => {
@@ -135,7 +153,7 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(pipeMovement);
-    }, [gameOver, pipeHeight]);
+    }, [gameOver, pipeHeight, pause]);
 
     // Pipe color effect
     useEffect(() => {
@@ -226,6 +244,7 @@ export default function Game() {
                 HighScore: {highScore}
             </h1>
 
+
             {/* Game Over */}
             {gameOver && (
                 <div
@@ -246,6 +265,32 @@ export default function Game() {
 
                     <button onClick={handleReset}>
                         Restart
+                    </button>
+                </div>
+            )}
+
+            {pause && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '300px',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        padding: '20px',
+                        backgroundColor: 'white',
+                        border: '2px solid black',
+                        borderRadius: '10px',
+                        textAlign: 'center',
+                        zIndex: 1000
+                    }}
+                >
+                    <h2>Paused ▶️</h2>
+
+                    <button
+                        onPointerDown={(e) => e.stopPropagation()}
+
+                        onClick={() => setPause(false)}>
+                        Play
                     </button>
                 </div>
             )}
@@ -289,6 +334,33 @@ export default function Game() {
                     height: 700 - pipeHeight - GAP
                 }}
             ></div>
+
+            <div
+                onPointerDown={(e) => e.stopPropagation()}
+
+                onClick={(e) => {
+
+                    if (gameOver) return
+                    setPause((prev) => !prev)
+                }}
+                style={{
+                    fontSize: '50px',
+                    position: 'absolute',
+                    bottom: '30px',
+
+                }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>
+                
+                <p style={{
+                    
+                    position: 'absolute',
+                    bottom: '-10px',
+                    color:'black',
+                    fontWeight:'bold',
+                    fontFamily:'math',
+                    fontSize:'15px'
+
+                }}>Press p</p>
+
         </div>
     );
 }
