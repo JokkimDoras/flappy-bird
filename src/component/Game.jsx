@@ -284,7 +284,7 @@ export default function Game() {
                         zIndex: 1000
                     }}
                 >
-                    <h2>Paused ▶️</h2>
+                    <h2>Paused ⏸️</h2>
 
                     <button
                         onPointerDown={(e) => e.stopPropagation()}
@@ -357,7 +357,8 @@ export default function Game() {
                     color:'black',
                     fontWeight:'bold',
                     fontFamily:'math',
-                    fontSize:'15px'
+                    fontSize:'15px',
+                    left:'10px'
 
                 }}>Press p</p>
 
