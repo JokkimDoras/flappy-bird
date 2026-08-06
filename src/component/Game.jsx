@@ -62,6 +62,8 @@ export default function Game() {
     useEffect(() => {
         const handleP = (e) => {
             if(gameOver) return
+            
+            if(e.repeat) return;
             if (e.key.toLowerCase() !== 'p') return;
 
            setPause((prev) => !prev )
