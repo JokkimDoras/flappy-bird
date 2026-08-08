@@ -10,6 +10,7 @@ export default function Game() {
     const [score, setScore] = useState(0);
     const [passed, setPassed] = useState(false);
     const [gone, setGone] = useState(false);
+    const [start, setStart] = useState(true);
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
@@ -21,6 +22,20 @@ export default function Game() {
 
     // Mobile responsive bird position
     const BIRD_LEFT = window.innerWidth < 600 ? 140 : 250;
+
+   //press space to start
+    useEffect(() => {
+  
+        const handleStart = (e) => {
+            if(e.key !== ' ') return;
+             setStart(false)
+        }
+
+        window.addEventListener('keydown',handleStart)
+
+        return () => window.removeEventListener('keydown',handleStart)
+
+    },[])
 
     useEffect(() => {
         birdRef.current = birdPosition;
@@ -42,7 +57,7 @@ export default function Game() {
 
     // Gravity
     useEffect(() => {
-
+        if(start) return
         if (gameOver) return;
         if (pause) return
 
@@ -51,7 +66,7 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(gravity);
-    }, [gameOver, pause]);
+    }, [gameOver, pause,start]);
 
     // Random pipe height
     const randomHeight = () => {
@@ -61,20 +76,21 @@ export default function Game() {
 
     useEffect(() => {
         const handleP = (e) => {
-            if(gameOver) return
-            
-            if(e.repeat) return;
-            if (e.key.toLowerCase() !== 'p') return;
+            if (gameOver) return
 
-           setPause((prev) => !prev )
+            if (e.key.toLowerCase() !== 'p') return;
+            if (e.repeat) return;
+
+            setPause((prev) => !prev)
 
         }
-        window.addEventListener('keydown',handleP)
+        window.addEventListener('keydown', handleP)
 
-        return () => window.removeEventListener('keydown',handleP)
-    },[gameOver])
+        return () => window.removeEventListener('keydown', handleP)
+    }, [gameOver])
     // Controls
     useEffect(() => {
+        if(start) return
         if (gameOver) return;
         if (pause) return;
 
@@ -97,12 +113,13 @@ export default function Game() {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('pointerdown', jump);
         };
-    }, [gameOver, pause]);
+    }, [gameOver, pause,start]);
 
     // Pipe movement + collision
     useEffect(() => {
+        if(start) return
         if (gameOver) return;
-        if (pause) return
+        if (pause) return;
 
 
         const pipeMovement = setInterval(() => {
@@ -155,7 +172,9 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(pipeMovement);
-    }, [gameOver, pipeHeight, pause]);
+    }, [gameOver, pipeHeight, pause,start]);
+
+
 
     // Pipe color effect
     useEffect(() => {
@@ -271,7 +290,34 @@ export default function Game() {
                 </div>
             )}
 
-            {pause && (
+            {start && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '300px',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        padding: '20px',
+                        backgroundColor: 'white',
+                        border: '2px solid black',
+                        borderRadius: '10px',
+                        textAlign: 'center',
+                        zIndex: 1000
+                    }}
+                >
+                    <h2>Press Space to Start</h2>
+
+                    <p style={{
+                        border: '2px solid black',
+                        padding: '3px',
+                        background: 'gray'
+                    }}>
+                        space
+                    </p>
+                </div>
+            )}
+
+            {!start && pause && (
                 <div
                     style={{
                         position: 'absolute',
@@ -337,7 +383,7 @@ export default function Game() {
                 }}
             ></div>
 
-            <div
+           { !start && <div
                 onPointerDown={(e) => e.stopPropagation()}
 
                 onClick={(e) => {
@@ -350,19 +396,19 @@ export default function Game() {
                     position: 'absolute',
                     bottom: '30px',
 
-                }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>
-                
-                <p style={{
-                    
-                    position: 'absolute',
-                    bottom: '-10px',
-                    color:'black',
-                    fontWeight:'bold',
-                    fontFamily:'math',
-                    fontSize:'15px',
-                    left:'10px'
+                }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>}
 
-                }}>Press p</p>
+            {!start && <p style={{
+
+                position: 'absolute',
+                bottom: '-10px',
+                color: 'black',
+                fontWeight: 'bold',
+                fontFamily: 'math',
+                fontSize: '15px',
+                left: '10px'
+
+            }}>Press p</p>}
 
         </div>
     );
