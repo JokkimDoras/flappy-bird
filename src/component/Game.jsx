@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import flappy from '../assets/flappy.png';
+// import jumpSound from '../assets/jumpSound.mp3';
+import jumpSound from '../assets/jumpSound.mp3'
 
 export default function Game() {
     const [birdPosition, setBirdPosition] = useState(400);
@@ -14,6 +16,7 @@ export default function Game() {
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
+
 
 
 
@@ -96,6 +99,12 @@ export default function Game() {
 
         const jump = () => {
             setBirdPosition(prev => prev - 50);
+
+            const audio = new Audio(jumpSound)
+            if(audio){
+                audio.currentTime = 0;
+            }
+            audio.play()
         };
 
         const handleKeyDown = (e) => {
