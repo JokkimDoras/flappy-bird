@@ -98,13 +98,13 @@ export default function Game() {
         if (pause) return;
 
         const jump = () => {
-            setBirdPosition(prev => prev - 50);
-
             const audio = new Audio(jumpSound)
             if(audio){
                 audio.currentTime = 0;
             }
             audio.play()
+            setBirdPosition(prev => prev - 50);
+
         };
 
         const handleKeyDown = (e) => {
