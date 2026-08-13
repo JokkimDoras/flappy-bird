@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import flappy from '../assets/flappy.png';
 // import jumpSound from '../assets/jumpSound.mp3';
 import jumpSound from '../assets/jumpSound.mp3'
+import deadSound from '../assets/sfx_die.mp3';
 
 export default function Game() {
     const [birdPosition, setBirdPosition] = useState(400);
@@ -98,11 +99,13 @@ export default function Game() {
         if (pause) return;
 
         const jump = () => {
-            const audio = new Audio(jumpSound)
-            if(audio){
-                audio.currentTime = 0;
-            }
-            audio.play()
+
+                const audio = new Audio(jumpSound)
+                if(audio){
+                    audio.currentTime = 0;
+                }
+                audio.play()
+            
             setBirdPosition(prev => prev - 50);
 
         };
@@ -174,6 +177,8 @@ export default function Game() {
                     (horizontal && bottomCollision)
                 ) {
                     setGameOver(true);
+                    const deadAudio = new Audio(deadSound);
+                    deadAudio.play()
                 }
 
                 return newX;
