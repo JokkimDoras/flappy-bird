@@ -3,6 +3,7 @@ import flappy from '../assets/flappy.png';
 // import jumpSound from '../assets/jumpSound.mp3';
 import jumpSound from '../assets/jumpSound.mp3'
 import deadSound from '../assets/sfx_die.mp3';
+import pointSound from '../assets/pointSound.mp3';
 
 export default function Game() {
     const [birdPosition, setBirdPosition] = useState(400);
@@ -209,6 +210,8 @@ export default function Game() {
         if (!passed && newX + 60 < birdLeft) {
             setScore(prev => prev + 1);
             setPassed(true);
+            const pointAudio = new Audio(pointSound);
+            pointAudio.play()
         }
     }, [pipeX, passed]);
 
