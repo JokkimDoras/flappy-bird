@@ -4,6 +4,7 @@ import flappy from '../assets/flappy.png';
 import jumpSound from '../assets/jumpSound.mp3'
 import deadSound from '../assets/sfx_die.mp3';
 import pointSound from '../assets/pointSound.mp3';
+import highScoreSound from '../assets/highscore.mp3';
 
 export default function Game() {
     const [birdPosition, setBirdPosition] = useState(400);
@@ -15,6 +16,7 @@ export default function Game() {
     const [passed, setPassed] = useState(false);
     const [gone, setGone] = useState(false);
     const [start, setStart] = useState(true);
+    const [hasBeatHighScore,setHasBeatHighScore] = useState(false);
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
@@ -53,12 +55,25 @@ export default function Game() {
     const GAP = 150;
 
     useEffect(() => {
+        if(score > highScore && !hasBeatHighScore){
+             const highScoreBeatAudio = new Audio(highScoreSound);
+             setTimeout(() => {
+
+                 highScoreBeatAudio.play();
+             },800)
+             setHasBeatHighScore(true)
+        }
         if (score > highScore) {
             setHighScore(score)
             localStorage.setItem('highscore', String(score))
-
         }
     }, [score, highScore])
+
+    useEffect(() => {
+      if(score>highScore){
+        
+      }
+    },[])
 
     // Gravity
     useEffect(() => {
