@@ -5,6 +5,8 @@ import jumpSound from '../assets/jumpSound.mp3'
 import deadSound from '../assets/sfx_die.mp3';
 import pointSound from '../assets/pointSound.mp3';
 import highScoreSound from '../assets/highscore.mp3';
+import { AiOutlineEnter } from "react-icons/ai";
+
 
 export default function Game() {
     const [birdPosition, setBirdPosition] = useState(400);
@@ -43,6 +45,18 @@ export default function Game() {
         return () => window.removeEventListener('keydown',handleStart)
 
     },[])
+
+    useEffect(() => {
+       if(!gameOver) return;
+       const handleEnter = (e) => {
+        if(e.key !== 'Enter') return;
+        handleReset()
+         
+       }
+       window.addEventListener('keydown',handleEnter)
+
+       return () => window.removeEventListener('keydown',handleEnter)
+    },[gameOver])
 
     useEffect(() => {
         birdRef.current = birdPosition;
@@ -316,8 +330,8 @@ export default function Game() {
                 >
                     <h2>Game Over</h2>
 
-                    <button onClick={handleReset}>
-                        Restart
+                    <button style={{padding:'10px'}} onClick={handleReset}>
+                        Restart <AiOutlineEnter/>
                     </button>
                 </div>
             )}
