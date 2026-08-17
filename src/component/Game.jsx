@@ -36,7 +36,7 @@ export default function Game() {
     useEffect(() => {
   
         const handleStart = (e) => {
-            if(e.key !== ' ') return;
+            if (e.type === 'keydown' && e.code !== 'Space') return;
              setStart(false)
         }
 
