@@ -41,8 +41,12 @@ export default function Game() {
         }
 
         window.addEventListener('keydown',handleStart)
+        window.addEventListener('click', handleStart)
 
-        return () => window.removeEventListener('keydown',handleStart)
+        return () => {
+            window.removeEventListener('keydown',handleStart)
+            window.removeEventListener('click', handleStart)
+        }
 
     },[])
 
