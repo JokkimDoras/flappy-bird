@@ -8,6 +8,7 @@ import highScoreSound from '../assets/highscore.mp3';
 import { AiOutlineEnter } from "react-icons/ai";
 
 
+
 export default function Game() {
     const [birdPosition, setBirdPosition] = useState(400);
     const [pipeX, setPipeX] = useState(600);
@@ -335,7 +336,7 @@ export default function Game() {
                     <h2>Game Over</h2>
 
                     <button style={{padding:'10px'}} onClick={handleReset}>
-                        Restart <AiOutlineEnter/>
+                        Restart <span style={{padding:'5px'}}><AiOutlineEnter/></span>
                     </button>
                 </div>
             )}
