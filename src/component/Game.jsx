@@ -6,6 +6,7 @@ import deadSound from '../assets/sfx_die.mp3';
 import pointSound from '../assets/pointSound.mp3';
 import highScoreSound from '../assets/highscore.mp3';
 import { AiOutlineEnter } from "react-icons/ai";
+import { IoSettings } from "react-icons/io5";
 
 
 
