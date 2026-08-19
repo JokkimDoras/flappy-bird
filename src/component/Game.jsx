@@ -6,6 +6,8 @@ import deadSound from '../assets/sfx_die.mp3';
 import pointSound from '../assets/pointSound.mp3';
 import highScoreSound from '../assets/highscore.mp3';
 import { AiOutlineEnter } from "react-icons/ai";
+import { IoSettings } from "react-icons/io5";
+
 
 
 export default function Game() {
@@ -85,7 +87,7 @@ export default function Game() {
             setHighScore(score)
             localStorage.setItem('highscore', String(score))
         }
-    }, [score, highScore])
+    }, [score, highScore,hasBeatHighScore])
 
     useEffect(() => {
       if(score>highScore){
@@ -262,6 +264,7 @@ export default function Game() {
         setPipeHeight(400);
         setScore(0);
         setGameOver(false);
+        setHasBeatHighScore(false)
     };
 
     let BG = gone ? '#121212' : 'green';
@@ -335,7 +338,7 @@ export default function Game() {
                     <h2>Game Over</h2>
 
                     <button style={{padding:'10px'}} onClick={handleReset}>
-                        Restart <AiOutlineEnter/>
+                        Restart <span style={{padding:'5px'}}><AiOutlineEnter/></span>
                     </button>
                 </div>
             )}
