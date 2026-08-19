@@ -38,7 +38,7 @@ export default function Game() {
     useEffect(() => {
   
         const handleStart = (e) => {
-            if(e.key !== ' ') return;
+            if (e.type === 'keydown' && e.code !== 'Space') return;
              setStart(false)
         }
 
@@ -87,7 +87,7 @@ export default function Game() {
             setHighScore(score)
             localStorage.setItem('highscore', String(score))
         }
-    }, [score, highScore])
+    }, [score, highScore,hasBeatHighScore])
 
     useEffect(() => {
       if(score>highScore){
@@ -264,6 +264,7 @@ export default function Game() {
         setPipeHeight(400);
         setScore(0);
         setGameOver(false);
+        setHasBeatHighScore(false)
     };
 
     let BG = gone ? '#121212' : 'green';
