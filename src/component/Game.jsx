@@ -85,7 +85,7 @@ export default function Game() {
             setHighScore(score)
             localStorage.setItem('highscore', String(score))
         }
-    }, [score, highScore])
+    }, [score, highScore,hasBeatHighScore])
 
     useEffect(() => {
       if(score>highScore){
@@ -262,6 +262,7 @@ export default function Game() {
         setPipeHeight(400);
         setScore(0);
         setGameOver(false);
+        setHasBeatHighScore(false)
     };
 
     let BG = gone ? '#121212' : 'green';
