@@ -448,6 +448,7 @@ export default function Game() {
                     fontSize: '50px',
                     position: 'absolute',
                     bottom: '30px',
+                    cursor:'pointer'
 
                 }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>}
 
