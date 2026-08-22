@@ -6,7 +6,7 @@ import deadSound from '../assets/sfx_die.mp3';
 import pointSound from '../assets/pointSound.mp3';
 import highScoreSound from '../assets/highscore.mp3';
 import { AiOutlineEnter } from "react-icons/ai";
-import { IoSettings } from "react-icons/io5";
+import { IoSettingsSharp } from "react-icons/io5";
 
 
 
@@ -20,7 +20,8 @@ export default function Game() {
     const [passed, setPassed] = useState(false);
     const [gone, setGone] = useState(false);
     const [start, setStart] = useState(true);
-    const [hasBeatHighScore,setHasBeatHighScore] = useState(false);
+    const [hasBeatHighScore, setHasBeatHighScore] = useState(false);
+    const [isSettingOpen, setIsSettingOpen] = useState(true)
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
@@ -34,35 +35,35 @@ export default function Game() {
     // Mobile responsive bird position
     const BIRD_LEFT = window.innerWidth < 600 ? 140 : 250;
 
-   //press space to start
+    //press space to start
     useEffect(() => {
-  
+
         const handleStart = (e) => {
             if (e.type === 'keydown' && e.code !== 'Space') return;
-             setStart(false)
+            setStart(false)
         }
 
-        window.addEventListener('keydown',handleStart)
+        window.addEventListener('keydown', handleStart)
         window.addEventListener('click', handleStart)
 
         return () => {
-            window.removeEventListener('keydown',handleStart)
+            window.removeEventListener('keydown', handleStart)
             window.removeEventListener('click', handleStart)
         }
 
-    },[])
+    }, [])
 
     useEffect(() => {
-       if(!gameOver) return;
-       const handleEnter = (e) => {
-        if(e.key !== 'Enter') return;
-        handleReset()
-         
-       }
-       window.addEventListener('keydown',handleEnter)
+        if (!gameOver) return;
+        const handleEnter = (e) => {
+            if (e.key !== 'Enter') return;
+            handleReset()
 
-       return () => window.removeEventListener('keydown',handleEnter)
-    },[gameOver])
+        }
+        window.addEventListener('keydown', handleEnter)
+
+        return () => window.removeEventListener('keydown', handleEnter)
+    }, [gameOver])
 
     useEffect(() => {
         birdRef.current = birdPosition;
@@ -75,29 +76,29 @@ export default function Game() {
     const GAP = 150;
 
     useEffect(() => {
-        if(score > highScore && !hasBeatHighScore){
-             const highScoreBeatAudio = new Audio(highScoreSound);
-             setTimeout(() => {
+        if (score > highScore && !hasBeatHighScore) {
+            const highScoreBeatAudio = new Audio(highScoreSound);
+            setTimeout(() => {
 
-                 highScoreBeatAudio.play();
-             },800)
-             setHasBeatHighScore(true)
+                highScoreBeatAudio.play();
+            }, 800)
+            setHasBeatHighScore(true)
         }
         if (score > highScore) {
             setHighScore(score)
             localStorage.setItem('highscore', String(score))
         }
-    }, [score, highScore,hasBeatHighScore])
+    }, [score, highScore, hasBeatHighScore])
 
     useEffect(() => {
-      if(score>highScore){
-        
-      }
-    },[])
+        if (score > highScore) {
+
+        }
+    }, [])
 
     // Gravity
     useEffect(() => {
-        if(start) return
+        if (start) return
         if (gameOver) return;
         if (pause) return
 
@@ -106,7 +107,7 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(gravity);
-    }, [gameOver, pause,start]);
+    }, [gameOver, pause, start]);
 
     // Random pipe height
     const randomHeight = () => {
@@ -130,18 +131,18 @@ export default function Game() {
     }, [gameOver])
     // Controls
     useEffect(() => {
-        if(start) return
+        if (start) return
         if (gameOver) return;
         if (pause) return;
 
         const jump = () => {
 
-                const audio = new Audio(jumpSound)
-                if(audio){
-                    audio.currentTime = 0;
-                }
-                audio.play()
-            
+            const audio = new Audio(jumpSound)
+            if (audio) {
+                audio.currentTime = 0;
+            }
+            audio.play()
+
             setBirdPosition(prev => prev - 50);
 
         };
@@ -161,11 +162,11 @@ export default function Game() {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('pointerdown', jump);
         };
-    }, [gameOver, pause,start]);
+    }, [gameOver, pause, start]);
 
     // Pipe movement + collision
     useEffect(() => {
-        if(start) return
+        if (start) return
         if (gameOver) return;
         if (pause) return;
 
@@ -222,7 +223,7 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(pipeMovement);
-    }, [gameOver, pipeHeight, pause,start]);
+    }, [gameOver, pipeHeight, pause, start]);
 
 
 
@@ -337,8 +338,8 @@ export default function Game() {
                 >
                     <h2>Game Over</h2>
 
-                    <button style={{padding:'10px'}} onClick={handleReset}>
-                        Restart <span style={{padding:'5px'}}><AiOutlineEnter/></span>
+                    <button style={{ padding: '10px' }} onClick={handleReset}>
+                        Restart <AiOutlineEnter />
                     </button>
                 </div>
             )}
@@ -436,7 +437,7 @@ export default function Game() {
                 }}
             ></div>
 
-           { !start && <div
+            {!start && <div
                 onPointerDown={(e) => e.stopPropagation()}
 
                 onClick={(e) => {
@@ -448,8 +449,26 @@ export default function Game() {
                     fontSize: '50px',
                     position: 'absolute',
                     bottom: '30px',
+                    cursor: 'pointer'
 
                 }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>}
+
+            {isSettingOpen && <span style={{
+
+                position: 'absolute',
+                bottom: '10px',
+                color: 'black',
+                fontWeight: 'bold',
+                fontFamily: 'math',
+                fontSize: '15px',
+                right: '10px',
+                padding:'20px'
+
+            }} >
+                <IoSettingsSharp size={40} />
+            </span>
+
+            }
 
             {!start && <p style={{
 
