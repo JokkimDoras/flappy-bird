@@ -267,6 +267,10 @@ export default function Game() {
         setGameOver(false);
         setHasBeatHighScore(false)
     };
+    const handleResetViaPause = () => {
+        handleReset()
+        setPause(false);
+    }
 
     let BG = gone ? '#121212' : 'green';
 
@@ -394,6 +398,10 @@ export default function Game() {
                         onClick={() => setPause(false)}>
                         Play
                     </button>
+
+                    <button onClick={() => handleResetViaPause()} className='p-2 m-2'>
+                        Restart
+                    </button>
                 </div>
             )}
 
@@ -462,7 +470,7 @@ export default function Game() {
                 fontFamily: 'math',
                 fontSize: '15px',
                 right: '10px',
-                padding:'20px'
+                padding: '20px'
 
             }} >
                 <IoSettingsSharp size={40} />
