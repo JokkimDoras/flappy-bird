@@ -21,7 +21,8 @@ export default function Game() {
     const [gone, setGone] = useState(false);
     const [start, setStart] = useState(true);
     const [hasBeatHighScore, setHasBeatHighScore] = useState(false);
-    const [isSettingOpen, setIsSettingOpen] = useState(true)
+    const [isSettingOpen, setIsSettingOpen] = useState(false);
+    const[isAudioOn,setIsAudioOn] = useState(false)
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
@@ -100,14 +101,15 @@ export default function Game() {
     useEffect(() => {
         if (start) return
         if (gameOver) return;
-        if (pause) return
+        if (pause) return;
+        if(isSettingOpen) return;
 
         const gravity = setInterval(() => {
             setBirdPosition(prev => prev + 3);
         }, 30);
 
         return () => clearInterval(gravity);
-    }, [gameOver, pause, start]);
+    }, [gameOver, pause, start,isSettingOpen]);
 
     // Random pipe height
     const randomHeight = () => {
@@ -134,6 +136,7 @@ export default function Game() {
         if (start) return
         if (gameOver) return;
         if (pause) return;
+        if(isSettingOpen) return;
 
         const jump = () => {
 
@@ -162,13 +165,14 @@ export default function Game() {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('pointerdown', jump);
         };
-    }, [gameOver, pause, start]);
+    }, [gameOver, pause, start,isSettingOpen]);
 
     // Pipe movement + collision
     useEffect(() => {
         if (start) return
         if (gameOver) return;
         if (pause) return;
+        if (isSettingOpen) return;
 
 
         const pipeMovement = setInterval(() => {
@@ -223,7 +227,7 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(pipeMovement);
-    }, [gameOver, pipeHeight, pause, start]);
+    }, [gameOver, pipeHeight, pause, start,isSettingOpen]);
 
 
 
@@ -325,6 +329,47 @@ export default function Game() {
 
 
             {/* Game Over */}
+
+            {/* Bird */}
+            <img
+                src={flappy}
+                style={{
+                    position: 'absolute',
+                    left: `${BIRD_LEFT}px`,
+                    top: birdPosition,
+                    borderRadius: '50%',
+                    width: '70px',
+                    height: '70px',
+                    transition: 'top 0.05s linear'
+                }}
+            />
+
+            {/* Top Pipe */}
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '0px',
+                    left: pipeX,
+                    backgroundColor: BG,
+                    transition: 'background-color 0.2s ease',
+                    width: '60px',
+                    height: pipeHeight
+                }}
+            ></div>
+
+            {/* Bottom Pipe */}
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '0px',
+                    left: pipeX,
+                    backgroundColor: BG,
+                    transition: 'background-color 0.2s ease',
+                    width: '60px',
+                    height: 700 - pipeHeight - GAP
+                }}
+            ></div>
+
             {gameOver && (
                 <div
                     style={{
@@ -405,45 +450,6 @@ export default function Game() {
                 </div>
             )}
 
-            {/* Bird */}
-            <img
-                src={flappy}
-                style={{
-                    position: 'absolute',
-                    left: `${BIRD_LEFT}px`,
-                    top: birdPosition,
-                    borderRadius: '50%',
-                    width: '70px',
-                    height: '70px',
-                    transition: 'top 0.05s linear'
-                }}
-            />
-
-            {/* Top Pipe */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '0px',
-                    left: pipeX,
-                    backgroundColor: BG,
-                    transition: 'background-color 0.2s ease',
-                    width: '60px',
-                    height: pipeHeight
-                }}
-            ></div>
-
-            {/* Bottom Pipe */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: '0px',
-                    left: pipeX,
-                    backgroundColor: BG,
-                    transition: 'background-color 0.2s ease',
-                    width: '60px',
-                    height: 700 - pipeHeight - GAP
-                }}
-            ></div>
 
             {!start && <div
                 onPointerDown={(e) => e.stopPropagation()}
@@ -461,7 +467,12 @@ export default function Game() {
 
                 }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>}
 
-            {isSettingOpen && <span style={{
+            {<span 
+            onPointerDown={(e) => e.stopPropagation()}
+             onClick={(e) => {
+                
+                setIsSettingOpen(!isSettingOpen)
+            }} style={{
 
                 position: 'absolute',
                 bottom: '10px',
@@ -470,13 +481,38 @@ export default function Game() {
                 fontFamily: 'math',
                 fontSize: '15px',
                 right: '10px',
-                padding: '20px'
+                padding: '20px',
+                cursor: 'pointer'
 
             }} >
-                <IoSettingsSharp size={40} />
+                <IoSettingsSharp color='blue' size={40} />
             </span>
 
             }
+            {isSettingOpen && <div style={{
+                position: 'absolute',
+                top: '300px',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '20px',
+                backgroundColor: 'white',
+                border: '2px solid black',
+                borderRadius: '10px',
+                textAlign: 'center',
+                zIndex: 1000
+
+            }}>
+                <div style={{padding:'35px',
+                    display:'flex',
+                    gap:'10px',
+                    justifyContent:'center',
+                    alignItems:'center',
+
+                }}>
+                    <span  >Audio</span>
+                    <button onClick={() => setIsAudioOn(!isAudioOn)}>{isAudioOn ? 'OFF' : 'ON'}</button>
+                    </div>
+            </div>}
 
             {!start && <p style={{
 
