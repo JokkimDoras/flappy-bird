@@ -22,7 +22,7 @@ export default function Game() {
     const [start, setStart] = useState(true);
     const [hasBeatHighScore, setHasBeatHighScore] = useState(false);
     const [isSettingOpen, setIsSettingOpen] = useState(false);
-    const[isAudioOn,setIsAudioOn] = useState(false)
+    const[isAudioOn,setIsAudioOn] = useState(true)
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
