@@ -81,7 +81,7 @@ export default function Game() {
             const highScoreBeatAudio = new Audio(highScoreSound);
             setTimeout(() => {
 
-                highScoreBeatAudio.play();
+               if(isAudioOn) highScoreBeatAudio.play();
             }, 800)
             setHasBeatHighScore(true)
         }
@@ -91,11 +91,6 @@ export default function Game() {
         }
     }, [score, highScore, hasBeatHighScore])
 
-    useEffect(() => {
-        if (score > highScore) {
-
-        }
-    }, [])
 
     // Gravity
     useEffect(() => {
@@ -139,12 +134,14 @@ export default function Game() {
         if(isSettingOpen) return;
 
         const jump = () => {
+        if(isAudioOn){
 
             const audio = new Audio(jumpSound)
             if (audio) {
                 audio.currentTime = 0;
             }
             audio.play()
+        }
 
             setBirdPosition(prev => prev - 50);
 
@@ -219,7 +216,7 @@ export default function Game() {
                 ) {
                     setGameOver(true);
                     const deadAudio = new Audio(deadSound);
-                    deadAudio.play()
+                    if(isAudioOn) deadAudio.play()
                 }
 
                 return newX;
@@ -251,7 +248,7 @@ export default function Game() {
             setScore(prev => prev + 1);
             setPassed(true);
             const pointAudio = new Audio(pointSound);
-            pointAudio.play()
+            if(isAudioOn)pointAudio.play()
         }
     }, [pipeX, passed]);
 
