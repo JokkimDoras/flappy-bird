@@ -22,7 +22,7 @@ export default function Game() {
     const [start, setStart] = useState(true);
     const [hasBeatHighScore, setHasBeatHighScore] = useState(false);
     const [isSettingOpen, setIsSettingOpen] = useState(false);
-    const[isAudioOn,setIsAudioOn] = useState(false)
+    const[isAudioOn,setIsAudioOn] = useState(true)
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
@@ -91,6 +91,7 @@ export default function Game() {
         }
     }, [score, highScore, hasBeatHighScore])
 
+    
 
     // Gravity
     useEffect(() => {
@@ -136,7 +137,9 @@ export default function Game() {
         const jump = () => {
         if(isAudioOn){
 
-            const audio = new Audio(jumpSound)
+          if(isAudioOn) {
+
+          const audio = new Audio(jumpSound)
             if (audio) {
                 audio.currentTime = 0;
             }
@@ -507,7 +510,7 @@ export default function Game() {
 
                 }}>
                     <span  >Audio</span>
-                    <button onClick={() => setIsAudioOn(!isAudioOn)}>{isAudioOn ? 'OFF' : 'ON'}</button>
+                    <button onClick={() => setIsAudioOn(!isAudioOn)}>{isAudioOn ? 'ON' : 'OFF'}</button>
                     </div>
             </div>}
 
