@@ -7,6 +7,7 @@ import pointSound from '../assets/pointSound.mp3';
 import highScoreSound from '../assets/highscore.mp3';
 import { AiOutlineEnter } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
 
 
 
@@ -508,6 +509,15 @@ export default function Game() {
                     alignItems:'center',
 
                 }}>
+                <span onClick={() => {
+                    setIsSettingOpen(false)
+                }} style={{
+                    position:'absolute',
+                    top:'5px',
+                    right:'5px',
+                    cursor:'pointer',
+                    
+                }}><IoMdClose/></span>
                     <span  >Audio</span>
                     <button onClick={() => setIsAudioOn(!isAudioOn)}>{isAudioOn ? 'ON' : 'OFF'}</button>
                     </div>
