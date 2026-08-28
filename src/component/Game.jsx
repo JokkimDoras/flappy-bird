@@ -242,6 +242,8 @@ export default function Game() {
         }
     }, [pipeX]);
 
+
+
     // Score
     useEffect(() => {
         const newX = pipeX;
@@ -261,6 +263,21 @@ export default function Game() {
             setGameOver(true);
         }
     }, [birdPosition]);
+
+    //handle ESC for setting
+
+    useEffect(() => {
+
+        const handleEsc = (e) => {
+            if(e.key !== 'Escape') return;
+            setIsSettingOpen(!isSettingOpen)
+        }
+
+        window.addEventListener('keydown',handleEsc)
+
+        return () => window.removeEventListener('keydown',handleEsc)
+
+    },[isSettingOpen])
 
     // Reset game
     const handleReset = () => {
@@ -475,7 +492,7 @@ export default function Game() {
             }} style={{
 
                 position: 'absolute',
-                bottom: '10px',
+                bottom: '-20px',
                 color: 'black',
                 fontWeight: 'bold',
                 fontFamily: 'math',
@@ -486,6 +503,7 @@ export default function Game() {
 
             }} >
                 <IoSettingsSharp color='blue' size={40} />
+                <p>Press Esc</p>
             </span>
 
             }
