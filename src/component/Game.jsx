@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import flappy from '../assets/flappy.png';
-// import jumpSound from '../assets/jumpSound.mp3';
 import jumpSound from '../assets/jumpSound.mp3'
 import deadSound from '../assets/sfx_die.mp3';
 import pointSound from '../assets/pointSound.mp3';
@@ -264,7 +263,7 @@ export default function Game() {
         }
     }, [birdPosition]);
 
-    //handle ESC for setting
+    //handle ESC for settinggo
 
     useEffect(() => {
 
