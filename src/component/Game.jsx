@@ -22,7 +22,8 @@ export default function Game() {
     const [start, setStart] = useState(true);
     const [hasBeatHighScore, setHasBeatHighScore] = useState(false);
     const [isSettingOpen, setIsSettingOpen] = useState(false);
-    const[isAudioOn,setIsAudioOn] = useState(true)
+    const [isAudioOn, setIsAudioOn] = useState(true)
+    const [preferImage, setPreferImage] = useState(null)
     const [highScore, setHighScore] = useState(() => {
         return Number(localStorage.getItem('highscore')) || 0;
     });
@@ -81,7 +82,7 @@ export default function Game() {
             const highScoreBeatAudio = new Audio(highScoreSound);
             setTimeout(() => {
 
-               if(isAudioOn) highScoreBeatAudio.play();
+                if (isAudioOn) highScoreBeatAudio.play();
             }, 800)
             setHasBeatHighScore(true)
         }
@@ -91,21 +92,21 @@ export default function Game() {
         }
     }, [score, highScore, hasBeatHighScore])
 
-    
+
 
     // Gravity
     useEffect(() => {
         if (start) return
         if (gameOver) return;
         if (pause) return;
-        if(isSettingOpen) return;
+        if (isSettingOpen) return;
 
         const gravity = setInterval(() => {
             setBirdPosition(prev => prev + 3);
         }, 30);
 
         return () => clearInterval(gravity);
-    }, [gameOver, pause, start,isSettingOpen]);
+    }, [gameOver, pause, start, isSettingOpen]);
 
     // Random pipe height
     const randomHeight = () => {
@@ -132,18 +133,18 @@ export default function Game() {
         if (start) return
         if (gameOver) return;
         if (pause) return;
-        if(isSettingOpen) return;
+        if (isSettingOpen) return;
 
         const jump = () => {
 
-          if(isAudioOn) {
+            if (isAudioOn) {
 
-          const audio = new Audio(jumpSound)
-            if (audio) {
-                audio.currentTime = 0;
+                const audio = new Audio(jumpSound)
+                if (audio) {
+                    audio.currentTime = 0;
+                }
+                audio.play()
             }
-            audio.play()
-        }
 
             setBirdPosition(prev => prev - 50);
 
@@ -164,7 +165,7 @@ export default function Game() {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('pointerdown', jump);
         };
-    }, [gameOver, pause, start,isSettingOpen]);
+    }, [gameOver, pause, start, isSettingOpen]);
 
     // Pipe movement + collision
     useEffect(() => {
@@ -218,7 +219,7 @@ export default function Game() {
                 ) {
                     setGameOver(true);
                     const deadAudio = new Audio(deadSound);
-                   if(isAudioOn) deadAudio.play()
+                    if (isAudioOn) deadAudio.play()
                 }
 
                 return newX;
@@ -226,7 +227,7 @@ export default function Game() {
         }, 30);
 
         return () => clearInterval(pipeMovement);
-    }, [gameOver, pipeHeight, pause, start,isSettingOpen]);
+    }, [gameOver, pipeHeight, pause, start, isSettingOpen]);
 
 
 
@@ -252,7 +253,7 @@ export default function Game() {
             setScore(prev => prev + 1);
             setPassed(true);
             const pointAudio = new Audio(pointSound);
-            if(isAudioOn) pointAudio.play()
+            if (isAudioOn) pointAudio.play()
         }
     }, [pipeX, passed]);
 
@@ -268,16 +269,23 @@ export default function Game() {
     useEffect(() => {
 
         const handleEsc = (e) => {
-            if(e.key !== 'Escape') return;
+            if (e.key !== 'Escape') return;
             setIsSettingOpen(!isSettingOpen)
         }
 
-        window.addEventListener('keydown',handleEsc)
+        window.addEventListener('keydown', handleEsc)
 
-        return () => window.removeEventListener('keydown',handleEsc)
+        return () => window.removeEventListener('keydown', handleEsc)
 
-    },[isSettingOpen])
+    }, [isSettingOpen])
 
+    const handleImageChange = (e) => {
+        const img = e.target.files[0]
+        console.log(img)
+        if (img) {
+            setPreferImage(URL.createObjectURL(img))
+        }
+    }
     // Reset game
     const handleReset = () => {
         setBirdPosition(250);
@@ -348,7 +356,7 @@ export default function Game() {
 
             {/* Bird */}
             <img
-                src={flappy}
+                src={preferImage ? preferImage : flappy}
                 style={{
                     position: 'absolute',
                     left: `${BIRD_LEFT}px`,
@@ -483,24 +491,24 @@ export default function Game() {
 
                 }}>{pause && !gameOver ? '▶️' : '⏸️'}</div>}
 
-            {<span 
-            onPointerDown={(e) => e.stopPropagation()}
-             onClick={(e) => {
-                
-                setIsSettingOpen(!isSettingOpen)
-            }} style={{
+            {<span
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
 
-                position: 'absolute',
-                bottom: '-20px',
-                color: 'black',
-                fontWeight: 'bold',
-                fontFamily: 'math',
-                fontSize: '15px',
-                right: '10px',
-                padding: '20px',
-                cursor: 'pointer'
+                    setIsSettingOpen(!isSettingOpen)
+                }} style={{
 
-            }} >
+                    position: 'absolute',
+                    bottom: '-20px',
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontFamily: 'math',
+                    fontSize: '15px',
+                    right: '10px',
+                    padding: '20px',
+                    cursor: 'pointer'
+
+                }} >
                 <IoSettingsSharp color='blue' size={40} />
                 <p>Press Esc</p>
             </span>
@@ -519,25 +527,60 @@ export default function Game() {
                 zIndex: 1000
 
             }}>
-                <div style={{padding:'35px',
-                    display:'flex',
-                    gap:'10px',
-                    justifyContent:'center',
-                    alignItems:'center',
+                <div style={{
+                    padding: '35px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
 
                 }}>
-                <span onClick={() => {
-                    setIsSettingOpen(false)
-                }} style={{
-                    position:'absolute',
-                    top:'5px',
-                    right:'5px',
-                    cursor:'pointer',
-                    
-                }}><IoMdClose/></span>
-                    <span  >Audio</span>
-                    <button onClick={() => setIsAudioOn(!isAudioOn)}>{isAudioOn ? 'ON' : 'OFF'}</button>
+                    <div style={{ display: 'flex', }}>
+
+                        <p>Modify BirdImage</p>
+                        <input
+                            id="image-upload"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            hidden
+                        />
+
+                        <label
+                            htmlFor="image-upload"
+                            style={{
+                                cursor: 'pointer',
+                                background: 'blue',
+                                color: 'white',
+                                width: '50px',
+                                height: '25px',
+                                position: 'relative',
+                                top: '15px',
+                                left: '5px',
+                                borderRadius: '20px',
+                                padding: '2px',
+                                textAlign: 'center'
+                            }}
+                        >
+                            select
+                        </label>
                     </div>
+                    <div>
+
+                        <span onClick={() => {
+                            setIsSettingOpen(false)
+                        }} style={{
+                            position: 'absolute',
+                            top: '5px',
+                            right: '5px',
+                            cursor: 'pointer',
+
+                        }}><IoMdClose /></span>
+                        <span  >Audio</span>
+                        <button onClick={() => setIsAudioOn(!isAudioOn)}>{isAudioOn ? 'ON' : 'OFF'}</button>
+                    </div>
+                </div>
             </div>}
 
             {!start && <p style={{
