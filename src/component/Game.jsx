@@ -558,12 +558,28 @@ export default function Game() {
                                 position: 'relative',
                                 top: '15px',
                                 left: '5px',
-                                borderRadius: '20px',
+                                borderRadius: '10px',
                                 padding: '2px',
                                 textAlign: 'center'
                             }}
                         >
                             select
+                        </label>
+                        <label onClick={() => setPreferImage(null)}  style={{
+                                cursor: 'pointer',
+                                background: 'blue',
+                                color: 'white',
+                                width: '50px',
+                                height: '25px',
+                                position: 'relative',
+                                top: '15px',
+                                left: '5px',
+                                borderRadius: '10px',
+                                padding: '2px',
+                                textAlign: 'center',
+                                marginLeft:'5px'
+                            }}>
+                            Reset
                         </label>
                     </div>
                     <div>
