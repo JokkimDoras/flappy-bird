@@ -113,7 +113,7 @@ export default function Game() {
         setPipeHeight(Math.floor(Math.random() * 300) + 50);
     };
 
-
+ //handlePause
     useEffect(() => {
         const handleP = (e) => {
             if (gameOver) return
@@ -270,6 +270,8 @@ export default function Game() {
 
         const handleEsc = (e) => {
             if (e.key !== 'Escape') return;
+            if (e.repeat) return;
+
             setIsSettingOpen(!isSettingOpen)
         }
 
